@@ -1,0 +1,18 @@
+digraph C {
+  graph [dpi=200, fontname="DejaVu Sans", rankdir=TB, nodesep=0.6, ranksep=0.7];
+  node [fontname="DejaVu Sans", fontsize=12, shape=record, style=filled, fillcolor="#f7fbff", color="#2f5496"];
+  edge [fontname="DejaVu Sans", fontsize=11, color="#555555"];
+  SC [label="{SelfCheck|- passed : int\l- failed : int\l|+ main(String[]) : void\l- unitChecks() : void\l- dataChecks(String) : void\l- interactive() : void\l}"];
+  OS [label="{OrderService|+ createOrder(Employee) : Order\l+ validateForConfirm(Order) : void\l+ confirm(Order) : void\l+ execute(Order, String) : void\l~ parseQuantity(String) : int\l~ parsePrice(String) : double\l}"];
+  O [label="{Order|- employee : Employee\l- items : List\<OrderItem\>\l- status : OrderStatus\l|+ addProduct(Product, int) : void\l+ removeProduct(String) : void\l+ total() : double\l+ confirm() : void\l+ getItems() : List\<OrderItem\> (только чтение)\l+ getStatus() : OrderStatus\l- find(String) : OrderItem\l- requireDraft() : void\l}"];
+  E [label="{Employee|- id : String\l- fullName : String\l|+ Employee(String, String)\l+ getId() : String\l+ getFullName() : String\l}"];
+  OI [label="{OrderItem|+ MIN_QUANTITY : int = 1\l+ MAX_QUANTITY : int = 10 (вариант 1)\l- product : Product\l- quantity : int\l|+ OrderItem(Product, int)\l+ checkQuantity(int) : void\l+ increase(int) : void\l+ getLineTotal() : double\l}"];
+  P [label="{Product|- id : String\l- name : String\l- price : double\l|+ Product(String, String, double)\l+ getId() : String\l+ getName() : String\l+ getPrice() : double\l}"];
+  ST [label="{\<\<enumeration\>\>\nOrderStatus|DRAFT\lCONFIRMED\l}"];
+  SC -> OS [label="использует", style=dashed, arrowhead=open];
+  OS -> O [label="создаёт и изменяет", style=dashed, arrowhead=open];
+  O -> E [label="1", arrowhead=vee, arrowtail=odiamond, dir=both];
+  O -> OI [label="0..*", arrowhead=vee, arrowtail=diamond, dir=both];
+  OI -> P [label="1", arrowhead=vee, arrowtail=odiamond, dir=both];
+  O -> ST [label="status", arrowhead=vee];
+}
